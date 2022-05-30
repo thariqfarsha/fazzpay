@@ -3,12 +3,25 @@ import Header from "../Header";
 import Footer from "../Footer";
 import Head from "next/head";
 import Navbar from "../Navbar";
+import axios from "../../utils/axios";
 
 export default function MainLayout(props) {
   const [isNotifShown, setIsNotifShown] = useState(false);
+  const [dismissTopupModal, setDismissTopupModal] = useState(false);
+  const [formTopup, setFormTopup] = useState({
+    amount: 0,
+  });
 
-  const handleTopupSubmit = () => {
-    return;
+  const handleChangeTopupForm = (e) => {
+    setFormTopup({ ...formTopup, amount: e.target.value });
+  };
+
+  const handleTopupSubmit = async (e) => {
+    e.preventDefault();
+
+    const resultTopup = await axios.post("/transaction/top-up", formTopup);
+    window.open(resultTopup.data.data.redirectUrl);
+    setFormTopup({ amount: 0 });
   };
 
   return (
@@ -17,7 +30,11 @@ export default function MainLayout(props) {
         <title>{props.title}</title>
       </Head>
       <Header isNotifShown={isNotifShown} setIsNotifShown={setIsNotifShown} />
-      <main className="vh-100" onClick={() => setIsNotifShown(false)}>
+      <main
+        className="vh-100"
+        style={{ paddingTop: "64px", paddingBottom: "40px" }}
+        onClick={() => setIsNotifShown(false)}
+      >
         <div className="container-lg py-4 h-100">
           <div className="row h-100">
             <div className="col-3 h-100">
@@ -64,6 +81,7 @@ export default function MainLayout(props) {
                   type="number"
                   className="form-control w-50 mx-auto text-center px-0 fw-bold fs-5"
                   max={10000000}
+                  onChange={handleChangeTopupForm}
                 />
               </div>
               <div className="modal-footer border-0">
