@@ -1,9 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import authImg from "../../public/images/auth-img.png";
 import Layout from "../../components/Layout/AuthLayout";
+import axios from "../../utils/axios";
+import PinInput from "../../components/PinInput";
+import { useSelector } from "react-redux";
 
 export default function createPIN() {
+  const [pin, setPin] = useState({
+    pin1: "",
+    pin2: "",
+    pin3: "",
+    pin4: "",
+    pin5: "",
+    pin6: "",
+  });
+  const [formPin, setFormPin] = useState({
+    pin: "",
+  });
+  const userId = useSelector((state) => state.user.data.id);
+
+  useEffect(() => {
+    setFormPin({ pin: "" });
+  }, []);
+
+  const handleCreatePin = async (e) => {
+    try {
+      e.preventDefault();
+      let fullPin =
+        pin.pin1 + pin.pin2 + pin.pin3 + pin.pin4 + pin.pin5 + pin.pin6;
+      fullPin = parseInt(fullPin, 10);
+      setFormPin({ ...formPin, pin: fullPin });
+      const resultCreatePin = await axios.patch(`/user/pin/${userId}`, formPin);
+      console.log(`/user/pin/${userId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Layout title={"Create PIN | FazzPay"}>
       <div className="container-lg px-5 py-4 vh-100">
@@ -35,36 +69,20 @@ export default function createPIN() {
               </p>
             </div>
           </div>
-          <div className="col-5 px-5 d-flex justify-content-center align-items-center">
+          <div className="col-5 p-5 ">
             <div>
               <h2 className="h4 fw-bold mb-2">
                 Secure Your Account, Your Wallet, and Your Data With 6 Digits
                 PIN
               </h2>
-              <p className="opacity-75 mb-4">
+              <p className="opacity-75 mb-5">
                 Create 6 digits pin to secure all your money and your data in
                 FazzPay app. Keep it secret and don't tell anyone about your
                 FazzPay account password and the PIN.
               </p>
-              <form>
-                <div className="d-flex mb-3">
-                  <div>
-                    <label for="pin1" className="form-label visually-hidden">
-                      Pin 1st Digit
-                    </label>
-                    <input
-                      type="text"
-                      maxLength={1}
-                      className="form-control border rounded"
-                      id="pin1"
-                      placeholder="_"
-                    />
-                  </div>
-                </div>
-                <button
-                  type="submit"
-                  className="btn btn-primary fw-bold mt-4 mb-5 w-100"
-                >
+              <form onSubmit={handleCreatePin} className="w-75 mx-auto">
+                <PinInput pin={pin} setPin={setPin} />
+                <button type="submit" className="btn btn-primary fw-bold w-100">
                   Confirm
                 </button>
               </form>
