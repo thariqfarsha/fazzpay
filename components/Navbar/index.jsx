@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+import axios from "../../utils/axios";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/actions/user";
 
 export default function Navbar() {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [selectedMenu, setMenu] = useState(router.asPath);
   const menus = [
-    { name: "Dashboard", icon: "grid", destination: "/home" },
+    { name: "Dashboard", icon: "grid", destination: "/dashboard" },
     { name: "Transfer", icon: "arrow-up", destination: "/transfer" },
-    { name: "Topup", icon: "plus-lg", destination: "/topup" },
+    { name: "Topup", icon: "plus-lg", destination: "#" },
     { name: "Profile", icon: "person", destination: "/profile" },
   ];
 
@@ -17,8 +22,10 @@ export default function Navbar() {
     router.push(menu.destination);
   };
 
-  const handleLogout = () => {
-    return;
+  const handleLogout = async () => {
+    Cookies.remove("token");
+    dispatch(logout());
+    router.push("/auth/login");
   };
 
   return (
@@ -31,8 +38,8 @@ export default function Navbar() {
             }`}
             onClick={() => handleClickMenu(menu)}
             key={menu.name}
-            data-bs-toggle={menu.destination === "/topup" ? "modal" : ""}
-            data-bs-target={menu.destination === "/topup" ? "#topupModal" : ""}
+            data-bs-toggle={menu.name === "Topup" ? "modal" : ""}
+            data-bs-target={menu.name === "Topup" ? "#topupModal" : ""}
           >
             <i className={`bi bi-${menu.icon} text-dark me-4`}></i>
             {menu.name}
