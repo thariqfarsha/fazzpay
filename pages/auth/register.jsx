@@ -1,10 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import authImg from "../../public/images/auth-img.png";
 import Layout from "../../components/Layout/AuthLayout";
+import axios from "../../utils/axios";
 
 export default function Register() {
+  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState("");
+  const [formRegister, setFormRegister] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChangeForm = (e) => {
+    const { name, value } = e.target;
+    setFormRegister({ ...formRegister, [name]: value });
+  };
+
+  const handleRegister = async (e) => {
+    try {
+      e.preventDefault();
+      const resultRegister = await axios.post("/auth/register", formRegister);
+      setIsError(false);
+      setMessage("Success! Please check your email to activate your account");
+    } catch (error) {
+      console.log(error);
+      setIsError(true);
+      setIsError(error.response.data.msg);
+    }
+  };
+
   return (
     <Layout title={"Sign Up | FazzPay"}>
       <div className="container-lg px-5 py-4 vh-100">
@@ -41,11 +69,24 @@ export default function Register() {
               <h2 className="h4 fw-bold mb-2">
                 Start Accessing Your Banking Needs With FazzPay
               </h2>
-              <p className="opacity-75 mb-4">
+              <p className="opacity-75">
                 Transfering money is easier than ever, you can access FazzPay
                 wherever you are and whenever you want.
               </p>
-              <form>
+              {message ? (
+                isError ? (
+                  <div className="alert alert-danger" role="alert">
+                    {message}
+                  </div>
+                ) : (
+                  <div className="alert alert-success" role="alert">
+                    {message}
+                  </div>
+                )
+              ) : (
+                <div className="mt-4"></div>
+              )}
+              <form onSubmit={handleRegister}>
                 <div className="input-with-icon mb-3">
                   <i className="bi bi-person input-icon text-secondary"></i>
                   <label
@@ -59,7 +100,9 @@ export default function Register() {
                     className="form-control"
                     id="first-name"
                     name="firstName"
-                    placeholder="Enter your first name"
+                    placeholder="First Name"
+                    value={formRegister.firstName}
+                    onChange={handleChangeForm}
                   />
                 </div>
                 <div className="input-with-icon mb-3">
@@ -72,7 +115,9 @@ export default function Register() {
                     className="form-control"
                     id="last-name"
                     name="lastName"
-                    placeholder="Enter your last name"
+                    placeholder="Last Name"
+                    value={formRegister.lastName}
+                    onChange={handleChangeForm}
                   />
                 </div>
                 <div className="input-with-icon mb-3">
@@ -85,7 +130,9 @@ export default function Register() {
                     className="form-control"
                     id="email"
                     name="email"
-                    placeholder="Enter your email"
+                    placeholder="Email"
+                    value={formRegister.email}
+                    onChange={handleChangeForm}
                   />
                 </div>
                 <div className="input-with-icon mb-3">
@@ -98,15 +145,14 @@ export default function Register() {
                     className="form-control"
                     id="password"
                     name="password"
-                    placeholder="Enter your password"
+                    placeholder="Password"
+                    value={formRegister.password}
+                    onChange={handleChangeForm}
                   />
                 </div>
-                <Link href="">
-                  <a className="fs-7 d-block text-end">Forgot password?</a>
-                </Link>
                 <button
                   type="submit"
-                  className="btn btn-primary fw-bold mt-4 mb-5 w-100"
+                  className="btn btn-primary fw-bold my-4 w-100"
                 >
                   Sign Up
                 </button>
