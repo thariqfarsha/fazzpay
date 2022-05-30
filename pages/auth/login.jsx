@@ -1,14 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import authImg from "../../public/images/auth-img.png";
 import Layout from "../../components/Layout/AuthLayout";
+import axios from "../../utils/axios";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { getUserById } from "../../store/actions/user";
+import { useRouter } from "next/router";
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  
+  const [formLogin, setFormLogin] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChangeForm = (e) => {
+    const { name, value } = e.target;
+
+    setFormLogin({ ...formLogin, [name]: value });
+  };
+
+  const handleLogin = async (e) => {
+    try {
+      e.preventDefault();
+      const resultLogin = await axios.post("/auth/login", formLogin);
+      const { id, pin, token } = resultLogin.data.data;
+      Cookies.set("token", token);
+      dispatch(getUserById(id));
+      if (pin) {
+        router.push("/dashboard");
+      } else {
+        router.push("/auth/pin");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Layout title={"Login | FazzPay"}>
       <div className="container-lg px-5 py-4 vh-100">
-        <div className="row h-100 shadow rounded border">
+        <div className="row h-100 bg-white shadow rounded border">
           <div
             className="col-7 rounded-start h-100 position-relative overflow-hidden"
             style={{
@@ -45,10 +81,10 @@ export default function Login() {
                 Transfering money is easier than ever, you can access FazzPay
                 wherever you are and whenever you want.
               </p>
-              <form>
+              <form onSubmit={handleLogin}>
                 <div className="input-with-icon mb-3">
                   <i className="bi bi-envelope input-icon text-secondary"></i>
-                  <label for="email" className="form-label visually-hidden">
+                  <label htmlFor="email" className="form-label visually-hidden">
                     Email
                   </label>
                   <input
@@ -57,11 +93,16 @@ export default function Login() {
                     id="email"
                     name="email"
                     placeholder="Enter your email"
+                    value={formLogin.email}
+                    onChange={handleChangeForm}
                   />
                 </div>
                 <div className="input-with-icon mb-3">
                   <i className="bi bi-key input-icon text-secondary"></i>
-                  <label for="password" className="form-label visually-hidden">
+                  <label
+                    htmlFor="password"
+                    className="form-label visually-hidden"
+                  >
                     Password
                   </label>
                   <input
@@ -70,9 +111,11 @@ export default function Login() {
                     id="password"
                     name="password"
                     placeholder="Enter your password"
+                    value={formLogin.password}
+                    onChange={handleChangeForm}
                   />
                 </div>
-                <Link href="">
+                <Link href="/auth/forgot-password">
                   <a className="fs-7 d-block text-end">Forgot password?</a>
                 </Link>
                 <button
