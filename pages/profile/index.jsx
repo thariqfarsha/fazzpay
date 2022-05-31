@@ -1,19 +1,18 @@
 import React from "react";
 import Image from "next/image";
-import profile8 from "../../public/profiles/8.png";
+import blankProfile from "../../public/profiles/blank.png";
 import MainLayout from "../../components/Layout/MainLayout";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 export default function Profile() {
   const router = useRouter();
 
-  const userData = {
-    id: 7,
-    name: "Robert",
-  };
+  const userData = useSelector((state) => state.user.data);
+  const { firstName, lastName, image, noTelp } = userData;
 
   const profileMenus = [
-    { name: "Personal Information", destination: `/profile/${userData.id}` },
+    { name: "Personal Information", destination: `/profile/personal-info` },
     { name: "Change Password", destination: "/profile/change-password" },
     { name: "Change PIN", destination: "/profile/change-pin" },
   ];
@@ -29,14 +28,19 @@ export default function Profile() {
           className="d-inline-block mb-2"
           style={{ width: "56px", height: "56px", borderRadius: "10px" }}
         >
-          <Image src={profile8} alt="profile picture" />
+          <Image
+            src={image ? process.env.URL_CLOUDINARY + image : blankProfile}
+            alt="profile picture"
+            width={56}
+            height={56}
+          />
         </div>
         <button className="btn py-0">
           <i className="bi bi-pen opacity-75 fs-7 me-2"></i>
           Edit
         </button>
-        <h2 className="fs-4 fw-bold mt-3">Robert Chandler</h2>
-        <p className="opacity-75 mb-4">+62 813-9387-7946</p>
+        <h2 className="fs-4 fw-bold mt-3">{`${firstName} ${lastName}`}</h2>
+        <p className="opacity-75 mb-4">{noTelp}</p>
         {profileMenus.map((menu, index) => (
           <button
             className="btn px-3 py-2 mb-2 rounded bg-secondary bg-opacity-25 w-50 d-flex justify-content-between align-items-center"
@@ -48,10 +52,11 @@ export default function Profile() {
           </button>
         ))}
         <button
-          className="btn px-3 py-2 mb-2 rounded bg-secondary bg-opacity-25 w-50 d-flex justify-content-between align-items-center"
+          className="btn px-3 mb-2 rounded bg-secondary bg-opacity-25 w-50 d-flex justify-content-between align-items-center"
           onClick={handleLogout}
         >
           <span className="fw-bold">Logout</span>
+          <i className="bi bi-arrow-right fs-4 opacity-0"></i>
         </button>
       </div>
     </MainLayout>
