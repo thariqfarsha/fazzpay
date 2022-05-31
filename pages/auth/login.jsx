@@ -6,13 +6,13 @@ import Layout from "../../components/Layout/AuthLayout";
 import axios from "../../utils/axios";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
-import { getUserById } from "../../store/actions/user";
+import { getUserByIdRedux } from "../../store/actions/user";
 import { useRouter } from "next/router";
 
 export default function Login() {
   const dispatch = useDispatch();
   const router = useRouter();
-  
+
   const [formLogin, setFormLogin] = useState({
     email: "",
     password: "",
@@ -30,7 +30,7 @@ export default function Login() {
       const resultLogin = await axios.post("/auth/login", formLogin);
       const { id, pin, token } = resultLogin.data.data;
       Cookies.set("token", token);
-      dispatch(getUserById(id));
+      await dispatch(getUserByIdRedux(id));
       if (pin) {
         router.push("/dashboard");
       } else {
