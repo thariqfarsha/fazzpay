@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import axios from "../../utils/axios";
 import { useDispatch } from "react-redux";
-import { logout } from "../../store/actions/user";
+import { logoutRedux } from "../../store/actions/user";
 
 export default function Navbar() {
   const router = useRouter();
@@ -24,7 +24,8 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     Cookies.remove("token");
-    dispatch(logout());
+    localStorage.clear();
+    dispatch(logoutRedux());
     router.push("/auth/login");
   };
 
