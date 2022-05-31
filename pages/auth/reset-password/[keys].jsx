@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import authImg from "../../../public/images/auth-img.png";
 import Layout from "../../../components/Layout/AuthLayout";
@@ -17,6 +17,10 @@ export default function ResetPassword() {
     confirmPassword: "",
   });
 
+  useEffect(() => {
+    setFormNewPassword({ ...formNewPassword, keysChangePassword: keys });
+  }, [keys]);
+
   const handleChangeForm = (e) => {
     const { name, value } = e.target;
     setFormNewPassword({ ...formNewPassword, [name]: value });
@@ -25,7 +29,6 @@ export default function ResetPassword() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      setFormNewPassword({ ...formNewPassword, keysChangePassword: keys });
       const result = await axios.patch("/auth/reset-password", formNewPassword);
       console.log(result);
       setIsError(false);
