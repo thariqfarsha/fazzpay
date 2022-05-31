@@ -30,8 +30,15 @@ export default function ChangePin() {
           onSubmit={isCurrentPinConfirmed ? handleChangePin : handleCurrentPin}
           className="w-25 mx-auto mt-5 pt-5"
         >
+          <label
+            htmlFor={isCurrentPinConfirmed ? "newPin" : "currentPin"}
+            className="form-label visually-hidden"
+          >
+            {isCurrentPinConfirmed ? "New PIN" : "Current PIN"}
+          </label>
           <input
             type="text"
+            id={isCurrentPinConfirmed ? "newPin" : "currentPin"}
             className="form-control w-100 mx-auto text-center px-0 fw-bold fs-5 mb-4"
             maxLength={6}
             placeholder={isCurrentPinConfirmed ? "New PIN" : "Current PIN"}
