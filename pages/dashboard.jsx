@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import MainLayout from "../components/Layout/MainLayout";
 import blankProfile from "../public/profiles/blank.png";
 import HistoryCard from "../components/HistoryCard";
+import { useDispatch, useSelector } from "react-redux";
+import currency from "../utils/currency";
+import { getUserByIdRedux } from "../store/actions/user";
+import { useRouter } from "next/router";
 
 export default function Dashboard() {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const userData = useSelector((state) => state.user.data);
+
   const histories = [
     {
       id: 1,
@@ -36,6 +45,14 @@ export default function Dashboard() {
     },
   ];
 
+  useEffect(() => {
+    getUserById();
+  }, []);
+
+  const getUserById = async () => {
+    await dispatch(getUserByIdRedux(userData.id));
+  };
+
   return (
     <MainLayout title={"Dashboard | FazzPay"}>
       <div className="row mb-4">
@@ -43,21 +60,26 @@ export default function Dashboard() {
           <div className="rounded shadow bg-primary px-4 py-3 d-flex justify-content-between">
             <div>
               <p className="text-white mb-1">Balance</p>
-              <h2 className="text-white fs-2 fw-bold mb-2">Rp120.000</h2>
+              <h2 className="text-white fs-2 fw-bold mb-2">
+                {currency.format(userData.balance)}
+              </h2>
               <p className="text-white fs-7 opacity-75 m-0">
-                +62 813-9387-7946
+                {userData.noTelp}
               </p>
             </div>
             <div className="d-flex flex-column justify-content-center align-items-stretch">
               <button
                 type="button"
                 className="btn btn-light dashboard__btn-white d-block border text-start px-4 mb-2"
+                onClick={() => router.push("/transfer")}
               >
                 <i className="bi bi-arrow-up text-white me-2"></i>Transfer
               </button>
               <button
                 type="button"
                 className="btn btn-light dashboard__btn-white d-block border text-start px-4"
+                data-bs-toggle="modal"
+                data-bs-target="#topupModal"
               >
                 <i className="bi bi-plus-lg text-white me-2"></i>Topup
               </button>
