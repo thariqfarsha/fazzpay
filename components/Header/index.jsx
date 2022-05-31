@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import profile8 from "../../public/profiles/8.png";
+import blankProfile from "../../public/profiles/blank.png";
 import NotifCard from "../NotifCard";
+import { useSelector } from "react-redux";
 
 export default function Header(props) {
+  const userData = useSelector((state) => state.user.data);
+  const { firstName, lastName, noTelp, image } = userData;
+
   return (
     <>
       <div className="container-fluid bg-white rounded-bottom shadow py-2 fixed-top">
@@ -11,11 +16,16 @@ export default function Header(props) {
           <h1 className="h3 fw-bold text-primary m-0">FazzPay</h1>
           <div className="d-flex align-items-center">
             <div className="profile-picture me-3">
-              <Image src={profile8} alt="profile picture" />
+              <Image
+                src={image ? process.env.URL_CLOUDINARY + image : blankProfile}
+                alt="profile picture"
+                width={48}
+                height={48}
+              />
             </div>
             <div className="me-2">
-              <p className="fs-6 fw-bold m-0">Robert Chandler</p>
-              <p className="fs-7 m-0">+62 8139 3877 7946</p>
+              <p className="fs-6 fw-bold m-0">{`${firstName} ${lastName}`}</p>
+              <p className="fs-7 m-0">{noTelp}</p>
             </div>
             <div className="d-flex justify-content-center align-items-center">
               <button
@@ -42,7 +52,7 @@ export default function Header(props) {
                 zIndex: 3,
               }}
             >
-              <div className="card-wrapper overflow-auto h-100">
+              <div className="scrollable-wrapper overflow-auto h-100">
                 <NotifCard />
                 <NotifCard />
                 <NotifCard />
