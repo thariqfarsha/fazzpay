@@ -92,7 +92,7 @@ export default function History() {
             <option value="year">Year</option>
           </select>
         </div>
-        <div className="card-wrapper" style={{ height: "85%" }}>
+        <div className="scrollable-wrapper" style={{ height: "85%" }}>
           {histories.map((history) => (
             <div className="mb-4" key={history.id}>
               <HistoryCard data={history} />
