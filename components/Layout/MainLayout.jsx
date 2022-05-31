@@ -7,7 +7,6 @@ import axios from "../../utils/axios";
 
 export default function MainLayout(props) {
   const [isNotifShown, setIsNotifShown] = useState(false);
-  const [dismissTopupModal, setDismissTopupModal] = useState(false);
   const [formTopup, setFormTopup] = useState({
     amount: 0,
   });
@@ -17,11 +16,14 @@ export default function MainLayout(props) {
   };
 
   const handleTopupSubmit = async (e) => {
-    e.preventDefault();
-
-    const resultTopup = await axios.post("/transaction/top-up", formTopup);
-    window.open(resultTopup.data.data.redirectUrl);
-    setFormTopup({ amount: 0 });
+    try {
+      e.preventDefault();
+      const resultTopup = await axios.post("/transaction/top-up", formTopup);
+      window.open(resultTopup.data.data.redirectUrl);
+      setFormTopup({ amount: 0 });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
