@@ -75,11 +75,11 @@ export default function Register() {
               </p>
               {message ? (
                 isError ? (
-                  <div className="alert alert-danger" role="alert">
+                  <div className="alert alert-danger py-2" role="alert">
                     {message}
                   </div>
                 ) : (
-                  <div className="alert alert-success" role="alert">
+                  <div className="alert alert-success py-2" role="alert">
                     {message}
                   </div>
                 )
@@ -87,10 +87,10 @@ export default function Register() {
                 <div className="mt-4"></div>
               )}
               <form onSubmit={handleRegister}>
-                <div className="input-with-icon mb-3">
+                <div className="input-with-icon mb-2">
                   <i className="bi bi-person input-icon text-secondary"></i>
                   <label
-                    for="first-name"
+                    htmlFor="first-name"
                     className="form-label visually-hidden"
                   >
                     First Name
@@ -105,9 +105,12 @@ export default function Register() {
                     onChange={handleChangeForm}
                   />
                 </div>
-                <div className="input-with-icon mb-3">
+                <div className="input-with-icon mb-2">
                   <i className="bi bi-person input-icon text-secondary"></i>
-                  <label for="last-name" className="form-label visually-hidden">
+                  <label
+                    htmlFor="last-name"
+                    className="form-label visually-hidden"
+                  >
                     Last Name
                   </label>
                   <input
@@ -120,9 +123,9 @@ export default function Register() {
                     onChange={handleChangeForm}
                   />
                 </div>
-                <div className="input-with-icon mb-3">
+                <div className="input-with-icon mb-2">
                   <i className="bi bi-envelope input-icon text-secondary"></i>
-                  <label for="email" className="form-label visually-hidden">
+                  <label htmlFor="email" className="form-label visually-hidden">
                     Email
                   </label>
                   <input
@@ -137,7 +140,10 @@ export default function Register() {
                 </div>
                 <div className="input-with-icon mb-3">
                   <i className="bi bi-key input-icon text-secondary"></i>
-                  <label for="password" className="form-label visually-hidden">
+                  <label
+                    htmlFor="password"
+                    className="form-label visually-hidden"
+                  >
                     Password
                   </label>
                   <input
