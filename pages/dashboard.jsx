@@ -6,51 +6,126 @@ import HistoryCard from "../components/HistoryCard";
 import { useDispatch, useSelector } from "react-redux";
 import currency from "../utils/currency";
 import { getUserByIdRedux } from "../store/actions/user";
+import { setHistoryNotifRedux } from "../store/actions/historyNotif";
 import { useRouter } from "next/router";
+import cookies from "next-cookies";
+import axiosServer from "../utils/axiosServer";
+import axios from "../utils/axios";
+import Chart from "chart.js/auto";
+import { Bar } from "react-chartjs-2";
 
-export default function Dashboard() {
+export async function getServerSideProps(context) {
+  try {
+    const dataCookies = cookies(context);
+    const historyDashboard = await axiosServer.get(
+      `/transaction/history?page=1&limit=4`,
+      {
+        headers: {
+          Authorization: `Bearer ${dataCookies.token}`,
+        },
+      }
+    );
+    const historyNotif = await axiosServer.get(
+      `/transaction/history?page=1&limit=10`,
+      {
+        headers: {
+          Authorization: `Bearer ${dataCookies.token}`,
+        },
+      }
+    );
+    return {
+      props: {
+        historyDashboard: historyDashboard.data.data,
+        historyNotif: historyNotif.data.data,
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination:
+          error.response?.status === 403
+            ? "/auth/login"
+            : `/error?msg=${error.response?.data.msg}`,
+        permanent: false,
+      },
+    };
+  }
+}
+
+export default function Dashboard(props) {
   const router = useRouter();
   const dispatch = useDispatch();
 
   const userData = useSelector((state) => state.user.data);
-
-  const histories = [
-    {
-      id: 1,
-      fullName: "Samuel Suhi",
-      type: "Accept",
-      image: blankProfile,
-      amount: 50000,
-    },
-    {
-      id: 2,
-      fullName: "Netflix",
-      type: "Transfer",
-      image: blankProfile,
-      amount: 149000,
-    },
-    {
-      id: 3,
-      fullName: "Christine Martha",
-      type: "Accept",
-      image: blankProfile,
-      amount: 150000,
-    },
-    {
-      id: 4,
-      fullName: "Adobe",
-      type: "Transfer",
-      image: blankProfile,
-      amount: 249000,
-    },
-  ];
+  const histories = props.historyDashboard;
+  const [dashboardData, setDashboardData] = useState({});
 
   useEffect(() => {
     getUserById();
+    getDashboardData();
+    setHistoryNotif();
   }, []);
 
   const getUserById = async () => {
     await dispatch(getUserByIdRedux(userData.id));
+  };
+
+  const setHistoryNotif = () => {
+    dispatch(setHistoryNotifRedux(props.historyNotif));
+  };
+
+  const getDashboardData = async () => {
+    const result = await axios.get(`/dashboard/${userData.id}`);
+    console.log(result);
+    setDashboardData(result.data.data);
+  };
+
+  const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Income",
+        data:
+          Object.keys(dashboardData).length !== 0
+            ? dashboardData.listIncome.map((item) => item.total)
+            : [],
+        backgroundColor: "#4c64ec",
+        barThickness: 12,
+        borderRadius: 12,
+      },
+      {
+        label: "Expense",
+        data:
+          Object.keys(dashboardData).length !== 0
+            ? dashboardData.listExpense.map((item) => item.total)
+            : [],
+        backgroundColor: "#9da6b5",
+        barThickness: 12,
+        borderRadius: 12,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        position: "top",
+      },
+    },
   };
 
   return (
@@ -90,26 +165,33 @@ export default function Dashboard() {
       <div className="row">
         <div className="col-7">
           <div className="bg-white rounded shadow px-4 py-3">
-            <div className="row">
+            <div className="row mb-3">
               <div className="col px-3">
                 <p className="fs-5 text-success mb-1">
                   <i className="bi bi-arrow-down"></i>
                 </p>
                 <p className="mb-1 fw-semibold">Income</p>
-                <p className="fs-5 fw-bold text-success">Rp2.120.000</p>
+                <p className="fs-5 fw-bold text-success">
+                  {currency.format(dashboardData.totalIncome)}
+                </p>
               </div>
               <div className="col px-3">
                 <p className="fs-5 text-danger mb-1">
                   <i className="bi bi-arrow-up"></i>
                 </p>
                 <p className="mb-1 fw-semibold">Expense</p>
-                <p className="fs-5 fw-bold text-danger">Rp1.560.000</p>
+                <p className="fs-5 fw-bold text-danger">
+                  {currency.format(dashboardData.totalExpense)}
+                </p>
               </div>
+            </div>
+            <div style={{ height: "208px" }}>
+              <Bar data={data} options={options} />
             </div>
           </div>
         </div>
         <div className="col-5">
-          <div className="bg-white rounded shadow px-4 py-3">
+          <div className="bg-white rounded shadow px-4 pt-3 pb-1">
             <div className="mb-4 d-flex justify-content-between align-items-start">
               <h2 className="fs-5 fw-bold">Transaction History</h2>
               <Link href="/history">
