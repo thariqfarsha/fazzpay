@@ -55,7 +55,7 @@ export default function MainLayout(props) {
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         tabIndex="-1"
-        aria-labelledby="topupModal"
+        aria-labelledby="topupModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog modal-dialog-centered">
@@ -64,7 +64,7 @@ export default function MainLayout(props) {
             style={{ borderRadius: "20px" }}
           >
             <div className="modal-header border-0">
-              <h5 className="modal-title fw-bold" id="topupModal">
+              <h5 className="modal-title fw-bold" id="topupModalLabel">
                 Top Up
               </h5>
               <button
