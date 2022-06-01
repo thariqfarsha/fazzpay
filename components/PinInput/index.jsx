@@ -30,6 +30,7 @@ export default function PinInput(props) {
             maxLength={1}
             onChange={addPin}
             autoComplete="off"
+            value={props.pin[digit]}
           />
         </div>
       ))}
