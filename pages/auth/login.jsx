@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import authImg from "../../public/images/auth-img.png";
@@ -17,6 +17,13 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    setIsError(false);
+    setMessage("");
+  }, []);
 
   const handleChangeForm = (e) => {
     const { name, value } = e.target;
@@ -31,6 +38,8 @@ export default function Login() {
       const { id, pin, token } = resultLogin.data.data;
       Cookies.set("token", token);
       await dispatch(getUserByIdRedux(id));
+      setIsError(false);
+      setMessage("You're logged in succesfully");
       if (pin) {
         router.push("/dashboard");
       } else {
@@ -38,6 +47,8 @@ export default function Login() {
       }
     } catch (error) {
       console.log(error);
+      setIsError(true);
+      setMessage(error.response.data.msg);
     }
   };
 
@@ -82,6 +93,19 @@ export default function Login() {
                 wherever you are and whenever you want.
               </p>
               <form onSubmit={handleLogin}>
+                {message ? (
+                  isError ? (
+                    <div className="alert alert-danger py-2" role="alert">
+                      {message}
+                    </div>
+                  ) : (
+                    <div className="alert alert-success py-2" role="alert">
+                      {message}
+                    </div>
+                  )
+                ) : (
+                  <div className="mt-4"></div>
+                )}
                 <div className="input-with-icon mb-3">
                   <i className="bi bi-envelope input-icon text-secondary"></i>
                   <label htmlFor="email" className="form-label visually-hidden">
