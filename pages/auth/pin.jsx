@@ -34,7 +34,7 @@ export default function createPIN() {
       let fullPin =
         pin.pin1 + pin.pin2 + pin.pin3 + pin.pin4 + pin.pin5 + pin.pin6;
       fullPin = +fullPin;
-      const resultCreatePin = await axios.patch(`/user/pin/${userId}`, {
+      await axios.patch(`/user/pin/${userId}`, {
         pin: fullPin,
       });
       setIsCreated(true);
