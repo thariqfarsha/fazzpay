@@ -30,6 +30,12 @@ axiosApiInstance.interceptors.response.use(
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+    if (error.response.status === 403) {
+      Cookies.clear();
+      window.location.href = "/auth/login";
+    } else {
+      window.location.href = `/error?msg=${error.response.data.msg}`;
+    }
     return Promise.reject(error);
   }
 );
