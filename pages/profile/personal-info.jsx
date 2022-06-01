@@ -11,9 +11,17 @@ export default function PersonalInformation() {
   const { firstName, lastName, email, noTelp } = userData;
 
   const personalInfos = [
-    { name: "First Name", value: firstName },
-    { name: "Last Name", value: lastName },
-    { name: "Verified Email", value: email },
+    {
+      name: "First Name",
+      value: firstName,
+      destination: "/profile/update-profile",
+    },
+    {
+      name: "Last Name",
+      value: lastName,
+      destination: "/profile/update-profile",
+    },
+    { name: "Verified Email", value: email, destination: "" },
   ];
 
   return (
@@ -39,9 +47,11 @@ export default function PersonalInformation() {
               <p className="fw-bold m-0">{info.value}</p>
             </div>
             <div>
-              <Link href="/profile/update-phone-number">
-                <a className="fs-7 fw-semibold text-primary">Edit</a>
-              </Link>
+              {info.name === "Verified Email" ? null : (
+                <Link href={info.destination}>
+                  <a className="fs-7 fw-semibold text-primary">Edit</a>
+                </Link>
+              )}
             </div>
           </div>
         ))}
