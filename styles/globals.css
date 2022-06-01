@@ -132,3 +132,20 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.update-image-input:hover {
+  cursor: pointer;
+}
+.update-image__overlay {
+  background-color: #111213a0;
+  width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  opacity: 0;
+  display: none;
+  transition: 0.3s;
+}
+.update-image-input:hover .update-image__overlay {
+  display: flex;
+  opacity: 1;
+}
