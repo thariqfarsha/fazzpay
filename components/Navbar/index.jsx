@@ -23,10 +23,14 @@ export default function Navbar() {
   };
 
   const handleLogout = async () => {
-    Cookies.remove("token");
-    localStorage.clear();
-    dispatch(logoutRedux());
-    router.push("/auth/login");
+    try {
+      await dispatch(logoutRedux());
+      Cookies.remove("token");
+      localStorage.clear();
+      router.push("/auth/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
