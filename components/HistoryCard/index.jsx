@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 export default function HistoryCard(props) {
   const router = useRouter();
   const path = router.asPath;
-  console.log(router);
 
   const { firstName, fullName, type, image, amount } = props.data;
 

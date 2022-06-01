@@ -76,7 +76,6 @@ export default function Dashboard(props) {
 
   const getDashboardData = async () => {
     const result = await axios.get(`/dashboard/${userData.id}`);
-    console.log(result);
     setDashboardData(result.data.data);
   };
 

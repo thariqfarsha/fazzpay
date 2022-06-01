@@ -30,7 +30,6 @@ export default function ResetPassword() {
     try {
       e.preventDefault();
       const result = await axios.patch("/auth/reset-password", formNewPassword);
-      console.log(result);
       setIsError(false);
       setMessage(result.data.data.msg);
     } catch (error) {
