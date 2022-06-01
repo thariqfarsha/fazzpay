@@ -1,48 +1,126 @@
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import MainLayout from "../../components/Layout/MainLayout";
+import PinInput from "../../components/PinInput";
+import axios from "../../utils/axios";
 
 export default function ChangePin() {
-  const [isCurrentPinConfirmed, setIsCurrentPinConfirmed] = useState(false);
+  const router = useRouter();
 
-  const handleCurrentPin = (e) => {
-    e.preventDefault();
+  const userId = useSelector((state) => state.user.data.id);
+
+  const [isCurrentPinConfirmed, setIsCurrentPinConfirmed] = useState(false);
+  const [pin, setPin] = useState({
+    pin1: "",
+    pin2: "",
+    pin3: "",
+    pin4: "",
+    pin5: "",
+    pin6: "",
+  });
+  const [formPin, setFormPin] = useState({
+    pin: "",
+  });
+  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    setIsError(false);
+    setMessage("");
+    resetForm();
+  }, []);
+
+  const resetForm = () => {
+    setPin({
+      pin1: "",
+      pin2: "",
+      pin3: "",
+      pin4: "",
+      pin5: "",
+      pin6: "",
+    });
+    setFormPin({
+      pin: "",
+    });
   };
 
-  const handleChangePin = (e) => {
-    e.preventDefault();
+  const handleCurrentPin = async (e) => {
+    try {
+      e.preventDefault();
+      const fullPin =
+        pin.pin1 + pin.pin2 + pin.pin3 + pin.pin4 + pin.pin5 + pin.pin6;
+      await axios.get(`/user/pin?pin=${fullPin}`);
+      setIsError(false);
+      setMessage("");
+      setIsCurrentPinConfirmed(true);
+      resetForm();
+    } catch (error) {
+      console.log(error);
+      setIsError(true);
+      setMessage(error.response.data.msg);
+      resetForm();
+    }
+  };
+
+  const handleChangePin = async (e) => {
+    try {
+      e.preventDefault();
+      let fullPin =
+        pin.pin1 + pin.pin2 + pin.pin3 + pin.pin4 + pin.pin5 + pin.pin6;
+      fullPin = +fullPin;
+      await axios.patch(`/user/pin/${userId}`, { pin: fullPin });
+      setIsError(false);
+      setMessage("PIN updated");
+      resetForm();
+      setIsCurrentPinConfirmed(false);
+    } catch (error) {
+      console.log(error);
+      setIsError(true);
+      setMessage(error.response.data.msg);
+      resetForm();
+    }
   };
 
   return (
     <MainLayout title={"Change PIN | FazzPay"}>
       <div className="bg-white rounded shadow p-4 h-100 position-relative">
-        <h2 className="fs-5 fw-bold mb-3">Change PIN</h2>
+        <div className="d-flex align-items-center mb-3">
+          <button className="btn px-1 py-0 me-2" onClick={() => router.back()}>
+            <i className="bi bi-chevron-left"></i>
+          </button>
+          <h2 className="fs-5 fw-bold m-0">Change PIN</h2>
+        </div>
         {isCurrentPinConfirmed ? (
-          <p className="opacity-50">
+          <p className="opacity-50 w-50">
             Type your new 6 digits security PIN to use in FazzPay.
           </p>
         ) : (
-          <p className="opacity-50">
+          <p className="opacity-50 w-50">
             Enter your current 6 digits FazzPay PIN below to continue to the
             next steps.
           </p>
         )}
         <form
           onSubmit={isCurrentPinConfirmed ? handleChangePin : handleCurrentPin}
-          className="w-25 mx-auto mt-5 pt-5"
+          className="w-50 mx-auto pt-5"
         >
-          <label
-            htmlFor={isCurrentPinConfirmed ? "newPin" : "currentPin"}
-            className="form-label visually-hidden"
-          >
-            {isCurrentPinConfirmed ? "New PIN" : "Current PIN"}
-          </label>
-          <input
-            type="text"
-            id={isCurrentPinConfirmed ? "newPin" : "currentPin"}
-            className="form-control w-100 mx-auto text-center px-0 fw-bold fs-5 mb-4"
-            maxLength={6}
-            placeholder={isCurrentPinConfirmed ? "New PIN" : "Current PIN"}
-          />
+          {message ? (
+            isError ? (
+              <div className="alert alert-danger py-2" role="alert">
+                {message}
+              </div>
+            ) : (
+              <div className="alert alert-success py-2" role="alert">
+                {message}
+              </div>
+            )
+          ) : (
+            <div className="mt-4"></div>
+          )}
+          <div className="mb-3">
+            <PinInput pin={pin} setPin={setPin} />
+          </div>
           <button type="submit" className="btn btn-primary fw-bold w-100">
             {isCurrentPinConfirmed ? "Change PIN" : "Continue"}
           </button>
