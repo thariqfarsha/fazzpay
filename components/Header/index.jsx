@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import profile8 from "../../public/profiles/8.png";
 import blankProfile from "../../public/profiles/blank.png";
 import NotifCard from "../NotifCard";
 import { useSelector } from "react-redux";
 
 export default function Header(props) {
   const userData = useSelector((state) => state.user.data);
+  const historyNotif = useSelector((state) => state.historyNotif.data);
   const { firstName, lastName, noTelp, image } = userData;
 
   return (
@@ -21,6 +21,8 @@ export default function Header(props) {
                 alt="profile picture"
                 width={48}
                 height={48}
+                style={{ borderRadius: "8px" }}
+                objectFit="cover"
               />
             </div>
             <div className="me-2">
@@ -37,7 +39,11 @@ export default function Header(props) {
                     : props.setIsNotifShown(true)
                 }
               >
-                <i className="bi bi-bell d-block fs-5"></i>
+                {props.isNotifShown ? (
+                  <i className="bi bi-bell-fill text-warning d-block fs-5"></i>
+                ) : (
+                  <i className="bi bi-bell d-block fs-5"></i>
+                )}
               </button>
             </div>
           </div>
@@ -53,12 +59,11 @@ export default function Header(props) {
               }}
             >
               <div className="scrollable-wrapper overflow-auto h-100">
-                <NotifCard />
-                <NotifCard />
-                <NotifCard />
-                <NotifCard />
-                <NotifCard />
-                <NotifCard />
+                {historyNotif.map((notif, index) => (
+                  <div key={index}>
+                    <NotifCard notif={notif} />
+                  </div>
+                ))}
               </div>
             </div>
           ) : null}
