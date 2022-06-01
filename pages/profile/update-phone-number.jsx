@@ -1,11 +1,13 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../../components/Layout/MainLayout";
 import axios from "../../utils/axios";
+import { getUserByIdRedux } from "../../store/actions/user";
 
 export default function UpdatePhoneNumber() {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const userData = useSelector((state) => state.user.data);
   const { id, noTelp } = userData;
@@ -15,6 +17,10 @@ export default function UpdatePhoneNumber() {
   const [formPhoneNumber, setFormPhoneNumber] = useState({
     noTelp: "",
   });
+
+  const getUserById = async () => {
+    await dispatch(getUserByIdRedux(userData.id));
+  };
 
   const handleChangeForm = (e) => {
     const { name, value } = e.target;
@@ -28,6 +34,7 @@ export default function UpdatePhoneNumber() {
       setFormPhoneNumber({ noTelp: "" });
       setIsError(false);
       setMessage("Your phone number is updated");
+      getUserById();
     } catch (error) {
       console.log(error);
       setIsError(true);
@@ -80,7 +87,6 @@ export default function UpdatePhoneNumber() {
               autoComplete="off"
               minLength={11}
               maxLength={13}
-              pattern="\d"
               required
             />
           </div>
