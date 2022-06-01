@@ -16,8 +16,10 @@ export async function getServerSideProps(context) {
     const dataCookies = cookies(context);
     const params = context.query;
     const page = !params?.page ? 1 : params.page;
+    const search = !params?.search ? "" : params.search;
+    const sort = !params?.sort ? "firstName ASC" : params.sort;
     const result = await axiosServer.get(
-      `user?page=${page}&limit=10&search=&sort=firstName ASC`,
+      `user?page=${page}&limit=10&search=${search}&sort=${sort}`,
       {
         headers: {
           Authorization: `Bearer ${dataCookies.token}`,
@@ -61,6 +63,7 @@ export default function Transfer(props) {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isError, setIsError] = useState(false);
   const [transactionId, setTransactionId] = useState("");
+  const [search, setSearch] = useState("");
   const [pin, setPin] = useState({
     pin1: "",
     pin2: "",
@@ -95,6 +98,27 @@ export default function Transfer(props) {
     resetPinInput();
   }, []);
 
+  const handleChangeSearchInput = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      router.push(
+        `/transfer?page=${pagination.page}${search ? `&search=${search}` : ""}`
+      );
+    }
+  };
+
+  const handleSort = (e) => {
+    const { value } = e.target;
+    router.push(
+      `/transfer?page=${pagination.page}${search ? `&search=${search}` : ""}${
+        value ? `&sort=${value}` : ""
+      }`
+    );
+  };
+
   const handleSelectReceiver = (user) => {
     setReceiver(user);
     setFormTransfer({ ...formTransfer, receiverId: user.id });
@@ -128,7 +152,6 @@ export default function Transfer(props) {
         pin.pin1 + pin.pin2 + pin.pin3 + pin.pin4 + pin.pin5 + pin.pin6;
       await axios.get(`/user/pin?pin=${fullPin}`);
       const result = await axios.post("/transaction/transfer", formTransfer);
-      console.log(result);
       setTransactionId(result.data.data.id);
       setIsError(false);
       setIsConfirmed(true);
@@ -165,13 +188,31 @@ export default function Transfer(props) {
           <>
             {/* SELECT RECEIVER */}
             <h2 className="fs-5 fw-bold mb-3">Search Receiver</h2>
-            <div className="input-with-icon mb-3">
-              <input
-                type="text"
-                className="search-box rounded bg-secondary bg-opacity-25 border-0 ps-5 pe-3 py-2 w-100"
-                placeholder="Search receiver here"
-              />
-              <i className="bi bi-search input-icon opacity-75 ms-2"></i>
+            <div className="mb-3 d-flex align-items-start">
+              <div className="input-with-icon me-3 w-100">
+                <input
+                  type="text"
+                  className="search-box rounded bg-secondary bg-opacity-25 border-0 ps-5 pe-3 py-2 w-100"
+                  placeholder="Search receiver here"
+                  value={search}
+                  onChange={handleChangeSearchInput}
+                  onKeyDown={handleSearch}
+                />
+                <i className="bi bi-search input-icon opacity-75 ms-2"></i>
+              </div>
+              <select
+                class="form-select bg-secondary bg-opacity-25 border-0 w-25"
+                aria-label="sort user"
+                onChange={handleSort}
+              >
+                <option defaultValue={""} value="">
+                  -- Sort --
+                </option>
+                <option value="firstName ASC">Name A-Z</option>
+                <option value="firstName DESC">Name Z-A</option>
+                <option value="noTelp ASC">Phone Number A-Z</option>
+                <option value="noTelp DESC">Phone Number Z-A</option>
+              </select>
             </div>
             <div className="scrollable-wrapper p-1" style={{ height: "70%" }}>
               {users.map((user) => (
