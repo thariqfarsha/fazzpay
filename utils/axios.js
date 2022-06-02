@@ -33,8 +33,6 @@ axiosApiInstance.interceptors.response.use(
     if (error.response.status === 403) {
       Cookies.clear();
       window.location.href = "/auth/login";
-    } else {
-      window.location.href = `/error?msg=${error.response.data.msg}`;
     }
     return Promise.reject(error);
   }
