@@ -30,6 +30,7 @@ export async function getServerSideProps(context) {
       props: {
         data: result.data.data,
         pagination: result.data.pagination,
+        sort,
       },
     };
   } catch (error) {
@@ -50,6 +51,7 @@ export default function Transfer(props) {
 
   const users = props.data;
   const pagination = props.pagination;
+  const sort = props.sort;
 
   const userData = useSelector((state) => state.user.data);
 
@@ -105,7 +107,9 @@ export default function Transfer(props) {
   const handleSearch = (e) => {
     if (e.key === "Enter") {
       router.push(
-        `/transfer?page=${pagination.page}${search ? `&search=${search}` : ""}`
+        `/transfer?page=1${search ? `&search=${search}` : ""}${
+          sort ? `&sort=${sort}` : ""
+        }`
       );
     }
   };
@@ -178,7 +182,11 @@ export default function Transfer(props) {
   };
 
   const handlePagination = (e) => {
-    router.push(`/transfer?page=${e.selected + 1}`);
+    router.push(
+      `/transfer?page=${e.selected + 1}${search ? `&search=${search}` : ""}${
+        sort ? `&sort=${sort}` : ""
+      }`
+    );
   };
 
   return (
