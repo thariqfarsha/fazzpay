@@ -8,7 +8,7 @@ export default function ForgotPassword() {
   const [message, setMessage] = useState("");
   const [formForgotPass, setFormForgotPass] = useState({
     email: "",
-    linkDirect: "http://localhost:3000/auth/reset-password",
+    linkDirect: process.env.URL_RESETPASSWORD,
   });
 
   const handleChangeForm = (e) => {
