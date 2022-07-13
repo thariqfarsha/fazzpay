@@ -6,10 +6,10 @@ const nextConfig = {
     URL_BACKEND2: "https://jsonplaceholder.typicode.com",
     URL_CLOUDINARY:
       "https://res.cloudinary.com/dd1uwz8eu/image/upload/v1653276449/",
-    URL_RESETPASSWORD: "ezpay.vercel.app/auth/reset-password"
+    URL_RESETPASSWORD: "ezpay.vercel.app/auth/reset-password",
   },
   images: {
-    domains: ["res.cloudinary.com"],
+    domains: ["res.cloudinary.com", "i.pravatar.cc"],
   },
   async rewrites() {
     return [
