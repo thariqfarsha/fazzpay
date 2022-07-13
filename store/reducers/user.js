@@ -11,12 +11,14 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
+        isError: false,
       };
     }
     case "GET_USER_BY_ID_FULFILLED": {
       return {
         ...state,
         isLoading: false,
+        isError: false,
         data: action.payload.data.data,
         msg: action.payload.data.msg,
       };
@@ -34,12 +36,14 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
+        isError: false,
       };
     }
     case "LOGOUT_FULFILLED": {
       return {
         ...state,
         isLoading: false,
+        isError: false,
         data: {},
         msg: action.payload.data.msg,
       };
@@ -49,7 +53,6 @@ const user = (state = initialState, action) => {
         ...state,
         isError: true,
         isLoading: false,
-        data: {},
         msg: action.payload.response.data.msg,
       };
     }
