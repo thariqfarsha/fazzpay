@@ -27,7 +27,7 @@ export default function Navbar() {
       await dispatch(logoutRedux());
       Cookies.remove("token");
       localStorage.clear();
-      router.push("/auth/login");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
