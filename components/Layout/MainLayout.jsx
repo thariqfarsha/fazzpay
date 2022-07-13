@@ -33,16 +33,16 @@ export default function MainLayout(props) {
       </Head>
       <Header isNotifShown={isNotifShown} setIsNotifShown={setIsNotifShown} />
       <main
-        className="vh-100"
-        style={{ paddingTop: "64px", paddingBottom: "40px" }}
+        className="main vh-100"
+        // style={{ paddingTop: "64px", paddingBottom: "40px" }}
         onClick={() => setIsNotifShown(false)}
       >
         <div className="container-lg py-4 h-100">
           <div className="row h-100">
-            <div className="col-3 h-100">
+            <div className="col-3 d-none d-md-block h-100">
               <Navbar />
             </div>
-            <div className="col-9 h-100">{props.children}</div>
+            <div className="col-md-9 h-100">{props.children}</div>
           </div>
         </div>
       </main>

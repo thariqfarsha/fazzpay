@@ -129,9 +129,12 @@ export default function Dashboard(props) {
 
   return (
     <MainLayout title={"Dashboard | FazzPay"}>
-      <div className="row mb-4">
-        <div className="col-12">
-          <div className="rounded shadow bg-primary px-4 py-3 d-flex justify-content-between">
+      <div className="row balance-row" style={{ height: "29%" }}>
+        <div className="col-12 h-100">
+          <div
+            className="rounded shadow bg-primary px-4 py-3 d-flex justify-content-between align-items-center mb-3 mb-md-0"
+            style={{ height: "85%" }}
+          >
             <div>
               <p className="text-white mb-1">Balance</p>
               <h2 className="text-white fs-2 fw-bold mb-2">
@@ -141,7 +144,7 @@ export default function Dashboard(props) {
                 {userData.noTelp}
               </p>
             </div>
-            <div className="d-flex flex-column justify-content-center align-items-stretch">
+            <div className="d-none d-md-flex flex-column justify-content-center align-items-stretch">
               <button
                 type="button"
                 className="btn btn-light dashboard__btn-white d-block border text-start px-4 mb-2"
@@ -159,11 +162,32 @@ export default function Dashboard(props) {
               </button>
             </div>
           </div>
+          <div className="row gx-3 mb-3 d-flex d-md-none">
+            <div className="col-6">
+              <button
+                type="button"
+                className="btn bg-secondary bg-opacity-25 d-block text-center w-100 fw-semibold"
+                onClick={() => router.push("/transfer")}
+              >
+                <i className="bi bi-arrow-up text-primary me-2"></i>Transfer
+              </button>
+            </div>
+            <div className="col-6">
+              <button
+                type="button"
+                className="btn bg-secondary bg-opacity-25 d-block text-center w-100 fw-semibold"
+                data-bs-toggle="modal"
+                data-bs-target="#topupModal"
+              >
+                <i className="bi bi-plus-lg text-primary me-2"></i>Topup
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-7">
-          <div className="bg-white rounded shadow px-4 py-3">
+      <div className="row stat-history-row" style={{ height: "71%" }}>
+        <div className="col-md-7 h-100 mb-4 order-2 order-md-1">
+          <div className="bg-white rounded shadow px-4 py-3 h-100">
             <div className="row mb-3">
               <div className="col px-3">
                 <p className="fs-5 text-success mb-1">
@@ -189,8 +213,8 @@ export default function Dashboard(props) {
             </div>
           </div>
         </div>
-        <div className="col-5">
-          <div className="bg-white rounded shadow px-4 pt-3 pb-1">
+        <div className="col-md-5 h-100 mb-4 mb-md-0 order-1 order-md-2">
+          <div className="bg-white rounded shadow px-4 pt-3 pb-1 h-100">
             <div className="mb-4 d-flex justify-content-between align-items-start">
               <h2 className="fs-5 fw-bold">Transaction History</h2>
               <Link href="/history">
