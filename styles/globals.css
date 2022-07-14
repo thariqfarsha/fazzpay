@@ -14,6 +14,11 @@ body {
   background-color: #fafcff;
   padding-top: 64px;
   padding-bottom: 40px;
+  min-height: 666px;
+}
+.auth-main {
+  background-color: #fafcff;
+  min-height: 666px;
 }
 
 a {
@@ -172,6 +177,14 @@ input[type="number"] {
   z-index: 3;
 }
 
+.auth-card {
+  border-radius: 28px;
+}
+
+.hero-text {
+  font-size: 48px;
+}
+
 @media (max-width: 768px) {
   .main {
     padding-bottom: 0;
@@ -189,5 +202,22 @@ input[type="number"] {
     width: 100%;
     height: 360px;
     z-index: 3;
+  }
+
+  .auth-card {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .auth-form {
+    height: 100%;
+    padding-top: 2.5rem;
+    padding-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-text {
+    font-size: 36px;
   }
 }

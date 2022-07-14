@@ -191,13 +191,13 @@ export default function Transfer(props) {
 
   return (
     <Layout title={"Transfer | FazzPay"}>
-      <div className="bg-white rounded shadow p-4 h-100 overflow-hidden position-relative">
+      <div className="bg-white rounded shadow p-3 p-md-4 h-100 overflow-hidden position-relative">
         {Object.keys(selectedReceiver).length === 0 ? (
           <>
             {/* SELECT RECEIVER */}
             <h2 className="fs-5 fw-bold mb-3">Search Receiver</h2>
             <div className="mb-3 d-flex align-items-start">
-              <div className="input-with-icon me-3 w-100">
+              <div className="input-with-icon me-0 me-md-3 w-100">
                 <input
                   type="text"
                   className="search-box rounded bg-secondary bg-opacity-25 border-0 ps-5 pe-3 py-2 w-100"
@@ -209,7 +209,7 @@ export default function Transfer(props) {
                 <i className="bi bi-search input-icon opacity-75 ms-2"></i>
               </div>
               <select
-                class="form-select bg-secondary bg-opacity-25 border-0 w-25"
+                class="form-select bg-secondary bg-opacity-25 border-0 w-25 d-none d-md-block"
                 aria-label="sort user"
                 onChange={handleSort}
               >
@@ -313,7 +313,7 @@ export default function Transfer(props) {
               <UserCard data={selectedReceiver} />
             </div>
             <h3 className="fs-5 fw-bold mb-2">Details</h3>
-            <div className="row row-cols-2">
+            <div className="row row-cols-1 row-cols-md-2">
               {transferDetails.map((detail, index) => (
                 <div key={index} className="col">
                   <div className="mb-3 rounded shadow-sm p-3">
