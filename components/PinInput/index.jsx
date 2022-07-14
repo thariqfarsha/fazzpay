@@ -14,6 +14,18 @@ export default function PinInput(props) {
     props.setPin({ ...props.pin, [`pin${e.target.name}`]: e.target.value });
   };
 
+  const handleBackspace = (e) => {
+    if (e.key === "Backspace") {
+      const prevSibling = document.getElementById(
+        `pin-${parseInt(e.target.name, 10) - 1}`
+      );
+
+      if (prevSibling !== null && !e.target.value) {
+        prevSibling.focus();
+      }
+    }
+  };
+
   return (
     <div className="row row-cols-6 gx-3">
       {Object.keys(props.pin).map((digit, index) => (
@@ -29,6 +41,7 @@ export default function PinInput(props) {
             className="form-control text-center text-primary px-0 fw-bold fs-5 mb-3"
             maxLength={1}
             onChange={addPin}
+            onKeyDown={handleBackspace}
             autoComplete="off"
             value={props.pin[digit]}
           />
