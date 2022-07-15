@@ -6,6 +6,8 @@ import hnmLogo from "../public/logos/hnm.png";
 import airbnbLogo from "../public/logos/airbnb.png";
 import dropboxLogo from "../public/logos/dropbox.png";
 import feature from "../public/images/feature-section-img.png";
+import feature1 from "../public/images/feature-img-1.png";
+import feature2 from "../public/images/feature-img-2.png";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
@@ -131,16 +133,13 @@ export default function Home() {
         </div>
       </header>
 
-      <main>
-        <section className="hero-section vh-100">
+      <main className="pt-5 pt-md-0">
+        <section className="hero-section">
           <div className="container-lg h-100">
-            <div className="row h-100">
-              <div className="col-md-6 d-flex align-items-center p-5">
-                <div>
-                  <h1
-                    className="text-white lh-base fw-extrabold mb-4"
-                    style={{ fontSize: 48 }}
-                  >
+            <div className="row h-100 overflow-hidden">
+              <div className="col-md-6 d-flex align-items-center pt-5 pb-2 px-4 p-md-5">
+                <div className="text-center text-md-start">
+                  <h1 className="hero-text text-white lh-base fw-extrabold mb-4">
                     Awesome App <br /> For Saving Time.
                   </h1>
                   <p className="text-white fs-5 mb-5">
@@ -152,20 +151,13 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-              <div className="col-md-6 h-100">
-                <div style={{ height: "15%" }}></div>
-                <div
-                  className="p-0 position-relative"
-                  style={{ height: "85%" }}
-                >
-                  <Image
-                    src={heroImg}
-                    alt="FazzPay mobile app screen"
-                    objectFit="contain"
-                    // height={600}
-                    layout="fill"
-                  />
-                </div>
+              <div className="col-md-6 h-100 pt-5 d-flex align-items-start align-items-md-end justify-content-center">
+                <Image
+                  src={heroImg}
+                  alt="FazzPay mobile app screen"
+                  objectFit="contain"
+                  height={500}
+                />
               </div>
             </div>
           </div>
@@ -174,19 +166,22 @@ export default function Home() {
           className="containter-fluid py-4"
           style={{ backgroundColor: "#eff0fc" }}
         >
-          <div className="container-lg px-5 d-flex justify-content-between">
-            {logos.map((logo) => (
-              <Image
-                src={logo.src}
-                alt={logo.alt}
-                height={100}
-                objectFit="contain"
-                key={logo.alt}
-              />
-            ))}
+          <div className="container-lg px-5">
+            <div className="row row-cols-2 row-cols-sm-4">
+              {logos.map((logo) => (
+                <div className="col" key={logo.alt}>
+                  <Image
+                    src={logo.src}
+                    alt={logo.alt}
+                    height={100}
+                    objectFit="contain"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </section>
-        <section className="container-fluid py-5">
+        <section className="container-fluid py-4 py-md-5">
           <div className="container-lg py-4 text-center">
             <h2 className="h1 fw-extrabold mb-4">
               <span className="text-primary">About</span> the Application.
@@ -197,8 +192,8 @@ export default function Home() {
             </p>
             <div className="row">
               {abouts.map((about) => (
-                <div className="col-md-4 px-4" key={about.icon}>
-                  <div className="bg-white rounded px-4 py-5 shadow d-flex flex-column align-items-center">
+                <div className="col-sm-4 px-4 mb-4 mb-md-0" key={about.icon}>
+                  <div className="bg-white rounded px-4 py-5 shadow d-flex flex-column align-items-center h-100">
                     <div
                       className="bg-primary bg-opacity-25 rounded-circle mb-3 d-flex justify-content-center align-items-center"
                       style={{ width: 56, height: 56 }}
@@ -216,22 +211,34 @@ export default function Home() {
           </div>
         </section>
         <section
-          className="container-fluid vh-100"
+          className="feature-section container-fluid"
           style={{ backgroundColor: "#eff0fc" }}
         >
           <div className="container-lg h-100">
             <div className="row h-100">
-              <div className="col-md-6 h-100 position-relative">
-                <Image
-                  src={feature}
-                  alt="Mobile app screen"
-                  className="mb-0"
-                  objectFit="contain"
-                  layout="fill"
-                />
+              <div className="col-md-6 h-100 d-none d-md-block">
+                <div className="d-flex flex-column justify-content-between h-100">
+                  <Image
+                    src={feature1}
+                    alt="mobile app screen"
+                    objectFit="contain"
+                  />
+                  <Image
+                    src={feature2}
+                    alt="mobile app screen"
+                    objectFit="contain"
+                  />
+                </div>
               </div>
-              <div className="col-md-6 d-flex flex-column justify-content-center">
-                <h2 className="h1 fw-extrabold lh-base mb-4">
+              <div className="col-md-6 feature-right-side pb-4 d-flex flex-column justify-content-center">
+                <Image
+                  src={feature1}
+                  alt="mobile app screen"
+                  objectFit="cover"
+                  objectPosition="bottom"
+                  height={400}
+                />
+                <h2 className="h1 fw-extrabold lh-base mb-4 text-center text-md-start">
                   All The <span className="text-primary">Great</span> <br />{" "}
                   FazzPay Features
                 </h2>
@@ -252,23 +259,23 @@ export default function Home() {
           </div>
         </section>
         <section className="container-fluid py-5">
-          <div className="container-lg text-center py-5">
+          <div className="container-lg text-center py-0 py-md-5">
             <h2 className="fw-extrabold mb-4">
               What Our Users <span className="text-primary">Say</span>
             </h2>
             <p className="mb-5">
-              We have some great features from the application and it’s totally
+              We have some great features from the application and it's totally
               free <br /> to use by all users around the world.
             </p>
             <div className="d-flex justify-content-between align-items-center">
               <div
                 role="button"
-                className="bg-white rounded shadow px-2 py-0"
+                className="bg-white rounded shadow px-2 py-0 d-none d-sm-block"
                 onClick={handlePrev}
               >
                 <i className="bi bi-arrow-left fs-2"></i>
               </div>
-              <div className="bg-white rounded shadow p-5 mx-5">
+              <div className="bg-white rounded shadow py-4 px-2 p-md-5 mx-3 mx-md-5">
                 <div className="mb-3">
                   <Image
                     src={`https://i.pravatar.cc/400?img=${testimonials[testi].avatar}`}
@@ -286,6 +293,22 @@ export default function Home() {
               </div>
               <div
                 role="button"
+                className="bg-white rounded shadow px-2 py-0 d-none d-sm-block"
+                onClick={handleNext}
+              >
+                <i className="bi bi-arrow-right fs-2"></i>
+              </div>
+            </div>
+            <div className="d-flex d-sm-none mt-3 justify-content-center">
+              <div
+                role="button"
+                className="bg-white rounded shadow px-2 py-0 me-4"
+                onClick={handlePrev}
+              >
+                <i className="bi bi-arrow-left fs-2"></i>
+              </div>
+              <div
+                role="button"
                 className="bg-white rounded shadow px-2 py-0"
                 onClick={handleNext}
               >
@@ -297,7 +320,7 @@ export default function Home() {
       </main>
 
       <footer className="container-fluid bg-primary">
-        <div className="container-lg py-5">
+        <div className="container-lg py-4 py-md-5">
           <div className="row">
             <div className="col-md-3">
               <p className="h3 fw-bold text-white mb-3">FazzPay</p>
@@ -306,17 +329,27 @@ export default function Home() {
                 with one single app.
               </p>
             </div>
-            <hr
-              className="text-white mt-4 mb-3 mx-2"
-              style={{ height: 2, opacity: 0.5 }}
-            />
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="col-12">
+              <hr
+                className="text-white mt-4 mb-3"
+                style={{ height: 2, opacity: 0.5 }}
+              />
+            </div>
+          </div>
+          <div className="row justify-content-between align-items-center">
+            <div className="col-md order-2 order-md-1 text-center text-md-start mt-3 mt-md-0">
               <p className="mb-0 text-white">
                 &copy; 2022 FazzPay. All right reserved.
               </p>
-              <div>
-                <span className="text-white me-4">+62 5637 8882 9901</span>
-                <span className="text-white">contact@fazzpay.com</span>
+            </div>
+            <div className="col-md order-1 order-md-2 text-start text-md-end">
+              <div className="row">
+                <div className="col-md">
+                  <span className="text-white me-4">+62 5637 8882 9901</span>
+                </div>
+                <div className="col-md">
+                  <span className="text-white">contact@fazzpay.com</span>
+                </div>
               </div>
             </div>
           </div>
