@@ -1,34 +1,153 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div id="top"></div>
+
+<!-- [![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url] -->
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/thariqfarsha/tickitix-mobile" style="font-size: 40px; font-weight: 700; color: #4c64ec">
+    FazzPay
+  </a>
+
+  <!-- <h2 align="center">Tickitix</h2> -->
+
+  <p align="center">
+    Basic e-wallet web app
+    <br />
+    <br/>
+    <a href="https://ezpay.vercel.app" target="_blank">https://ezpay.vercel.app</a>
+    <br />
+    <br/>
+    <a href="https://github.com/thariqfarsha/fazzpay/issues" target="_blank">Report Bug</a>
+    ·
+    <a href="https://github.com/thariqfarsha/fazzpay/issues" target="_blank">Request Feature</a>
+  </p>
+  <br/>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#screenshots">Screenshots</a></li>
+      </ul>
+    </li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+<!-- ABOUT THE PROJECT -->
+
+## About The Project
+
+Fazzpay is a basic e-wallet web app. As an e-wallet, users can top up their balance via several payment channels provided by Midtrans as the payment gateway to perform financial transactions. As for now, this app can only be used to transfer and accept money among registered users. More functionalities will be developed and updated later, so this app will be a fully functional e-wallet to fulfill its users' financial needs.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+### Built With
+
+- [NextJS](https://nextjs.org/)
+- [React Redux](https://react-redux.js.org/)
+- [Bootstrap](https://getbootstrap.com/)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- GETTING STARTED -->
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- [NodeJS and npm](https://nodejs.org/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+1. Clone the repo
+   ```sh
+   git clone https://github.com/thariqfarsha/fazzpay.git
+   ```
+1. Install NPM packages
+   ```sh
+   npm install
+   ```
+1. Run the development server with `npm run dev` and now you're able to edit this project
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+<!-- SCREENSHOTS -->
 
-## Learn More
+## Screenshots
 
-To learn more about Next.js, take a look at the following resources:
+![homepage](https://res.cloudinary.com/dm8rg2aj8/image/upload/v1658046494/Fazzpay/SS/web/fazzpay-home_p3wumr.png)
+![login page](https://res.cloudinary.com/dm8rg2aj8/image/upload/v1658046494/Fazzpay/SS/web/fazzpay-login_izzaid.png)
+![dashboard page](https://res.cloudinary.com/dm8rg2aj8/image/upload/v1658046494/Fazzpay/SS/web/fazzpay-dashboard_c45ztm.png)
+![history page](https://res.cloudinary.com/dm8rg2aj8/image/upload/v1658046494/Fazzpay/SS/web/fazzpay-history-notif_he35io.png)
+![profile page](https://res.cloudinary.com/dm8rg2aj8/image/upload/v1658046494/Fazzpay/SS/web/fazzpay-profile_yzzyig.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<!-- LICENSE -->
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+© [Thariq Farsha](https://github.com/thariqfarsha/)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<!-- CONTACT -->
+
+## Contact
+
+Email: mthariqfarsha@gmail.com
+
+Project Link: [https://github.com/thariqfarsha/fazzpay](https://github.com/thariqfarsha/fazzpay)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- ACKNOWLEDGMENTS -->
+
+## Acknowledgments
+
+These are several dependencies and resources that I find helpful for this app development
+
+- [Redux Persist](https://github.com/rt2zz/redux-persist)
+- [js-cookie](https://github.com/js-cookie/js-cookie)
+- [next-cookies](https://github.com/matthewmueller/next-cookies)
+- [chart.js](https://www.chartjs.org/)
+- [react-paginate](https://github.com/AdeleD/react-paginate)
+- [Best README template](https://github.com/othneildrew/Best-README-Template)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
+[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
+[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/othneildrew
+[product-screenshot]: images/screenshot.png
