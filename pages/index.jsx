@@ -10,14 +10,37 @@ import feature1 from "../public/images/feature-img-1.png";
 import feature2 from "../public/images/feature-img-2.png";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import cookies from "next-cookies";
+
+export async function getServerSideProps(context) {
+  try {
+    const dataCookies = cookies(context);
+    const token = dataCookies.token;
+
+    if (token) {
+      return {
+        redirect: {
+          destination: "/dashboard",
+          permanent: false,
+        },
+      };
+    }
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export default function Home() {
+  document.title = "FazzPay";
+
   const router = useRouter();
 
   const user = useSelector((state) => state.user.data);
-  if (Object.keys(user).length > 0) {
-    router.push("/dashboard");
-  }
 
   const [testi, setTesti] = useState(0);
 

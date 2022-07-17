@@ -4,11 +4,16 @@ import Footer from "../Footer";
 import Head from "next/head";
 import Navbar from "../Navbar";
 import axios from "../../utils/axios";
+import BottomBar from "../BottomBar";
+import { useRouter } from "next/router";
 
 export default function MainLayout(props) {
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
   const [isNotifShown, setIsNotifShown] = useState(false);
   const [formTopup, setFormTopup] = useState({
-    amount: 0,
+    amount: "",
   });
 
   const handleChangeTopupForm = (e) => {
@@ -18,11 +23,14 @@ export default function MainLayout(props) {
   const handleTopupSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
       const resultTopup = await axios.post("/transaction/top-up", formTopup);
       window.open(resultTopup.data.data.redirectUrl);
-      setFormTopup({ amount: 0 });
+      setIsLoading(false);
+      setFormTopup({ amount: "" });
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -33,8 +41,7 @@ export default function MainLayout(props) {
       </Head>
       <Header isNotifShown={isNotifShown} setIsNotifShown={setIsNotifShown} />
       <main
-        className="main vh-100"
-        // style={{ paddingTop: "64px", paddingBottom: "40px" }}
+        className={router.pathname === "/dashboard" ? "main-dashboard" : "main"}
         onClick={() => setIsNotifShown(false)}
       >
         <div className="container-lg py-4 h-100">
@@ -46,6 +53,7 @@ export default function MainLayout(props) {
           </div>
         </div>
       </main>
+      <BottomBar />
       <Footer />
 
       {/* TOPUP MODAL */}
@@ -82,17 +90,31 @@ export default function MainLayout(props) {
                 <input
                   type="number"
                   className="form-control w-50 mx-auto text-center px-0 fw-bold fs-5"
+                  min={1000}
                   max={10000000}
                   onChange={handleChangeTopupForm}
+                  value={formTopup.amount}
+                  placeholder="0"
+                  required
                 />
               </div>
               <div className="modal-footer border-0">
                 <button
                   type="submit"
-                  className="btn btn-primary px-4"
-                  data-bs-dismiss="modal"
+                  className="btn btn-primary px-4 flex-grow-1 flex-md-grow-0"
+                  disabled={!formTopup.amount}
+                  // data-bs-dismiss="modal"
                 >
-                  Submit
+                  {isLoading ? (
+                    <div
+                      className="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
               </div>
             </form>

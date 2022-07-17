@@ -186,10 +186,10 @@ export default function Dashboard(props) {
         </div>
       </div>
       <div className="row stat-history-row" style={{ height: "71%" }}>
-        <div className="col-md-7 h-100 mb-4 order-2 order-md-1">
+        <div className="col-md-7 h-100 order-2 order-md-1">
           <div className="bg-white rounded shadow px-4 py-3 h-100">
             <div className="row mb-3">
-              <div className="col px-3">
+              <div className="col-6 px-3">
                 <p className="fs-5 text-success mb-1">
                   <i className="bi bi-arrow-down"></i>
                 </p>
@@ -198,7 +198,7 @@ export default function Dashboard(props) {
                   {currency.format(dashboardData.totalIncome)}
                 </p>
               </div>
-              <div className="col px-3">
+              <div className="col-6 px-3">
                 <p className="fs-5 text-danger mb-1">
                   <i className="bi bi-arrow-up"></i>
                 </p>
@@ -208,13 +208,13 @@ export default function Dashboard(props) {
                 </p>
               </div>
             </div>
-            <div style={{ height: "208px" }}>
+            <div style={{ height: "auto" }}>
               <Bar data={data} options={options} />
             </div>
           </div>
         </div>
         <div className="col-md-5 h-100 mb-4 mb-md-0 order-1 order-md-2">
-          <div className="bg-white rounded shadow px-4 pt-3 pb-1 h-100">
+          <div className="bg-white rounded shadow px-4 pt-3 pb-1 h-100 overflow-hidden">
             <div className="mb-4 d-flex justify-content-between align-items-start">
               <h2 className="fs-5 fw-bold">Transaction History</h2>
               <Link href="/history">

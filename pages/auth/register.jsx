@@ -1,19 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import authImg from "../../public/images/auth-img.png";
 import Layout from "../../components/Layout/AuthLayout";
 import axios from "../../utils/axios";
 
 export default function Register() {
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formRegister, setFormRegister] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
   });
+
+  const isAllFormFilled = Object.keys(formRegister).every(
+    (el) => formRegister[el]
+  );
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
+  }, [message]);
 
   const handleChangeForm = (e) => {
     const { name, value } = e.target;
@@ -23,13 +34,16 @@ export default function Register() {
   const handleRegister = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
       const resultRegister = await axios.post("/auth/register", formRegister);
+      setIsLoading(false);
       setIsError(false);
       setMessage("Success! Please check your email to activate your account");
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       setIsError(true);
-      setIsError(error.response.data.msg);
+      setMessage(error.response.data.msg);
     }
   };
 
@@ -123,7 +137,7 @@ export default function Register() {
                 Password
               </label>
               <input
-                type="password"
+                type={showPwd ? "text" : "password"}
                 className="form-control"
                 id="password"
                 name="password"
@@ -131,10 +145,30 @@ export default function Register() {
                 value={formRegister.password}
                 onChange={handleChangeForm}
               />
+              <div role="button" onClick={() => setShowPwd(!showPwd)}>
+                <i
+                  className={`bi bi-${
+                    showPwd ? "eye-slash" : "eye"
+                  } text-secondary position-absolute top-50 end-0 translate-middle`}
+                ></i>
+              </div>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary fw-bold my-4 w-100">
-            Sign Up
+          <button
+            type="submit"
+            className="btn btn-primary fw-bold my-4 w-100"
+            disabled={!isAllFormFilled}
+          >
+            {isLoading ? (
+              <div
+                className="spinner-border spinner-border-sm text-white"
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </form>
         <p className="text-center m-0">

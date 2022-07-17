@@ -27,13 +27,13 @@ export default function PersonalInformation() {
   return (
     <MainLayout title={"Personal Information | FazzPay"}>
       <div className="bg-white rounded shadow p-4 h-100 position-relative">
-        <div className="d-flex align-items-center mb-3">
+        <div className="d-flex align-items-center mb-4 mb-md-3">
           <button className="btn px-1 py-0 me-2" onClick={() => router.back()}>
             <i className="bi bi-chevron-left"></i>
           </button>
           <h2 className="fs-5 fw-bold m-0">Personal Information</h2>
         </div>
-        <p className="opacity-50">
+        <p className="opacity-50 d-none d-md-block">
           We got your personal information from the sign up proccess. If you
           want to make changes on your information, contact our support.
         </p>

@@ -25,9 +25,22 @@ export default function Profile() {
   const [message, setMessage] = useState("");
 
   const profileMenus = [
-    { name: "Personal Information", destination: `/profile/personal-info` },
-    { name: "Change Password", destination: "/profile/change-password" },
-    { name: "Change PIN", destination: "/profile/change-pin" },
+    {
+      name: "Personal Information",
+      action: () => handleMenu("/profile/personal-info"),
+      icon: "arrow-right",
+    },
+    {
+      name: "Change Password",
+      action: () => handleMenu("/profile/change-password"),
+      icon: "arrow-right",
+    },
+    {
+      name: "Change PIN",
+      action: () => handleMenu("/profile/change-pin"),
+      icon: "arrow-right",
+    },
+    { name: "Logout", action: () => handleLogout(), icon: "box-arrow-right" },
   ];
 
   useEffect(() => {
@@ -89,12 +102,16 @@ export default function Profile() {
     }
   };
 
+  const handleMenu = (destination) => {
+    router.push(destination);
+  };
+
   const handleLogout = async () => {
     try {
       await dispatch(logoutRedux());
       Cookies.remove("token");
       localStorage.clear();
-      router.push("/auth/login");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
@@ -102,7 +119,7 @@ export default function Profile() {
 
   return (
     <MainLayout title={"Profile | FazzPay"}>
-      <div className="bg-white rounded shadow p-5 h-100 d-flex flex-column justify-content-center align-items-center">
+      <div className="bg-white rounded shadow p-4 p-md-5 h-100 d-flex flex-column justify-content-center align-items-center position-relative">
         <div
           className="d-inline-block mb-2"
           style={{ width: "56px", height: "56px", borderRadius: "10px" }}
@@ -128,21 +145,14 @@ export default function Profile() {
         <p className="opacity-75 mb-4">{noTelp}</p>
         {profileMenus.map((menu, index) => (
           <button
-            className="btn px-3 py-2 mb-2 rounded bg-secondary bg-opacity-25 w-50 d-flex justify-content-between align-items-center"
+            className="profile-menu btn px-3 py-2 mb-2 rounded bg-secondary bg-opacity-25 d-flex justify-content-between align-items-center"
             key={index}
-            onClick={() => router.push(menu.destination)}
+            onClick={menu.action}
           >
             <span className="fw-bold">{menu.name}</span>
-            <i className="bi bi-arrow-right fs-4 opacity-75"></i>
+            <i className={`bi bi-${menu.icon} fs-4 opacity-75`}></i>
           </button>
         ))}
-        <button
-          className="btn px-3 mb-2 rounded bg-secondary bg-opacity-25 w-50 d-flex justify-content-between align-items-center"
-          onClick={handleLogout}
-        >
-          <span className="fw-bold">Logout</span>
-          <i className="bi bi-arrow-right fs-4 opacity-0"></i>
-        </button>
       </div>
 
       {/* Edit Profile Image Modal */}

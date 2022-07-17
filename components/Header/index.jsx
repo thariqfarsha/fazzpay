@@ -3,8 +3,11 @@ import Image from "next/image";
 import blankProfile from "../../public/profiles/blank.png";
 import NotifCard from "../NotifCard";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 export default function Header(props) {
+  const router = useRouter();
+
   const userData = useSelector((state) => state.user.data);
   const historyNotif = useSelector((state) => state.historyNotif.data);
   const { firstName, lastName, noTelp, image } = userData;
@@ -54,16 +57,7 @@ export default function Header(props) {
             </div>
           </div>
           {props.isNotifShown ? (
-            <div
-              className="notif-modal bg-light rounded shadow-lg p-4 position-absolute"
-              // style={{
-              //   top: "130%",
-              //   right: "2%",
-              //   width: "30%",
-              //   height: "360px",
-              //   zIndex: 3,
-              // }}
-            >
+            <div className="notif-modal bg-light rounded shadow-lg p-4 position-absolute">
               <div className="scrollable-wrapper overflow-auto h-100">
                 {historyNotif.map((notif, index) => (
                   <div key={index}>

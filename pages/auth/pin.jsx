@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 export default function createPIN() {
   const router = useRouter();
 
+  const userId = useSelector((state) => state.user.data.id);
+
   const [pin, setPin] = useState({
     pin1: "",
     pin2: "",
@@ -18,15 +20,9 @@ export default function createPIN() {
     pin5: "",
     pin6: "",
   });
-  const [formPin, setFormPin] = useState({
-    pin: "",
-  });
-  const userId = useSelector((state) => state.user.data.id);
   const [isCreated, setIsCreated] = useState(false);
 
-  useEffect(() => {
-    setFormPin({ pin: "" });
-  }, []);
+  const isAllFormFilled = Object.keys(pin).every((el) => pin[el]);
 
   const handleCreatePin = async (e) => {
     try {
@@ -72,6 +68,7 @@ export default function createPIN() {
             <button
               type="submit"
               className="btn btn-primary fw-bold w-100 mt-3"
+              disabled={!isAllFormFilled}
             >
               Confirm
             </button>

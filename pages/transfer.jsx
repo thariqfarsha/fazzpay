@@ -64,6 +64,7 @@ export default function Transfer(props) {
   const [isFormFilled, setIsFormFilled] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [transactionId, setTransactionId] = useState("");
   const [search, setSearch] = useState("");
   const [pin, setPin] = useState({
@@ -74,6 +75,8 @@ export default function Transfer(props) {
     pin5: "",
     pin6: "",
   });
+
+  const isAllFormFilled = Object.keys(pin).every((el) => pin[el]);
 
   const transferDetails = [
     { name: "Amount", value: currency.format(formTransfer.amount) },
@@ -152,16 +155,19 @@ export default function Transfer(props) {
   const handlePinSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
       const fullPin =
         pin.pin1 + pin.pin2 + pin.pin3 + pin.pin4 + pin.pin5 + pin.pin6;
       await axios.get(`/user/pin?pin=${fullPin}`);
       const result = await axios.post("/transaction/transfer", formTransfer);
       setTransactionId(result.data.data.id);
+      setIsLoading(false);
       setIsError(false);
       setIsConfirmed(true);
       resetPinInput();
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       if (error.response?.data.msg === "Wrong pin") {
         resetPinInput();
       } else {
@@ -191,9 +197,9 @@ export default function Transfer(props) {
 
   return (
     <Layout title={"Transfer | FazzPay"}>
-      <div className="bg-white rounded shadow p-3 p-md-4 h-100 overflow-hidden position-relative">
+      <div className="main-card bg-white rounded shadow p-3 p-md-4 overflow-hidden position-relative">
         {Object.keys(selectedReceiver).length === 0 ? (
-          <>
+          <div className="d-flex flex-column h-100">
             {/* SELECT RECEIVER */}
             <h2 className="fs-5 fw-bold mb-3">Search Receiver</h2>
             <div className="mb-3 d-flex align-items-start">
@@ -209,7 +215,7 @@ export default function Transfer(props) {
                 <i className="bi bi-search input-icon opacity-75 ms-2"></i>
               </div>
               <select
-                class="form-select bg-secondary bg-opacity-25 border-0 w-25 d-none d-md-block"
+                className="form-select bg-secondary bg-opacity-25 border-0 w-25 d-none d-md-block"
                 aria-label="sort user"
                 onChange={handleSort}
               >
@@ -222,25 +228,27 @@ export default function Transfer(props) {
                 <option value="noTelp DESC">Phone Number Z-A</option>
               </select>
             </div>
-            <div className="scrollable-wrapper p-1" style={{ height: "70%" }}>
-              {users.map((user) => (
-                <div
-                  className="user-card rounded mb-2"
-                  onClick={() => handleSelectReceiver(user)}
-                  key={user.id}
-                >
-                  <UserCard data={user} />
-                </div>
-              ))}
+            <div className="position-relative flex-grow-1">
+              <div className="scrollable-wrapper p-1 position-absolute top-0 bottom-0 start-0 end-0">
+                {users.map((user) => (
+                  <div
+                    className="user-card rounded mb-2"
+                    onClick={() => handleSelectReceiver(user)}
+                    key={user.id}
+                  >
+                    <UserCard data={user} />
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="d-flex justify-content-center position-absolute bottom-0 start-50 translate-middle-x">
+            <div className="d-flex justify-content-center">
               <ReactPaginate
                 previousLabel={"Previous"}
                 nextLabel={"Next"}
                 breakLabel={"..."}
                 pageCount={pagination.totalPage}
                 onPageChange={handlePagination}
-                containerClassName={"pagination mb-4"}
+                containerClassName={"pagination mb-0 mt-3"}
                 pageClassName={"page-item px-1"}
                 pageLinkClassName={"page-link rounded"}
                 previousClassName={"page-item visually-hidden"}
@@ -252,127 +260,146 @@ export default function Transfer(props) {
                 activeLinkClassName={"text-white shadow"}
               />
             </div>
-          </>
+          </div>
         ) : !isFormFilled ? (
-          <>
+          <div className="d-flex flex-column h-100">
             {/* TRANSFER FORM */}
             <h2 className="fs-5 fw-bold mb-3">Transfer Money</h2>
             <UserCard data={selectedReceiver} />
             <form
               onSubmit={handleFormTransfer}
               autoComplete="off"
-              className="pt-5"
+              className="pt-5 flex-grow-1 d-flex flex-column justify-content-between"
             >
-              <input
-                type="number"
-                name="amount"
-                min={1001}
-                max={userData.balance}
-                className="transfer__amount-input d-block fs-1 fw-bold border-0 text-primary text-center mb-3 w-50 bg-transparent mx-auto "
-                placeholder="0"
-                aria-label="amount of money to transfer"
-                onChange={handleChangeForm}
-                value={formTransfer.amount}
-                required
-              />
-              <p className="fw-bold text-center">
-                {currency.format(userData.balance)} Available
-              </p>
-              <div className="input-with-icon w-50 mx-auto">
+              <div>
                 <input
-                  type="text"
-                  maxLength={20}
-                  name="notes"
-                  className="form-control"
-                  placeholder="Add some notes"
-                  aria-label="transfer notes"
+                  type="number"
+                  name="amount"
+                  min={1000}
+                  max={userData.balance}
+                  className="transfer__amount-input d-block fs-1 fw-bold border-0 text-primary text-center mb-3 w-50 bg-transparent mx-auto "
+                  placeholder="0"
+                  aria-label="amount of money to transfer"
                   onChange={handleChangeForm}
-                  value={formTransfer.notes}
+                  value={formTransfer.amount}
+                  required
                 />
-                <i className="bi bi-pen input-icon opacity-50"></i>
+                <p className="fw-bold text-center">
+                  {currency.format(userData.balance)} Available
+                </p>
+                <div className="input-with-icon profile-form mx-auto">
+                  <input
+                    type="text"
+                    maxLength={20}
+                    name="notes"
+                    className="form-control"
+                    placeholder="Add some notes"
+                    aria-label="transfer notes"
+                    onChange={handleChangeForm}
+                    value={formTransfer.notes}
+                  />
+                  <i className="bi bi-pen input-icon opacity-50"></i>
+                </div>
               </div>
-              <div className="position-absolute bottom-0 end-0 p-4">
+              <div className="text-end d-flex d-md-block">
                 <button
                   type="button"
-                  className="btn btn-outline-primary fw-bold px-4 me-2"
+                  className="btn btn-outline-primary fw-bold px-4 me-2 flex-grow-1"
                   onClick={() => setReceiver({})}
                 >
                   Back
                 </button>
-                <button type="submit" className="btn btn-primary fw-bold px-4">
+                <button
+                  type="submit"
+                  className="btn btn-primary fw-bold px-2 px-md-4 flex-grow-1"
+                >
                   Continue
                 </button>
               </div>
             </form>
-          </>
+          </div>
         ) : !isConfirmed ? (
-          <>
+          <div className="d-flex flex-column justify-content-between h-100">
             {/* TRANSFER CONFIRMATION */}
-            <h2 className="fs-5 fw-bold mb-3">Transfer To</h2>
-            <div className="mb-4">
-              <UserCard data={selectedReceiver} />
-            </div>
-            <h3 className="fs-5 fw-bold mb-2">Details</h3>
-            <div className="row row-cols-1 row-cols-md-2">
-              {transferDetails.map((detail, index) => (
-                <div key={index} className="col">
-                  <div className="mb-3 rounded shadow-sm p-3">
-                    <p className="fs-7 opacity-75 mb-1">{detail.name}</p>
-                    <p className="fw-bold m-0 text-truncate">{detail.value}</p>
+            <div>
+              <h2 className="fs-5 fw-bold mb-3">Transfer To</h2>
+              <div className="mb-4">
+                <UserCard data={selectedReceiver} />
+              </div>
+              <h3 className="fs-5 fw-bold mb-2">Details</h3>
+              <div className="row row-cols-1 row-cols-md-2">
+                {transferDetails.map((detail, index) => (
+                  <div key={index} className="col">
+                    <div className="mb-3 rounded shadow-sm p-3 d-none d-md-block">
+                      <p className="fs-7 opacity-75 mb-1">{detail.name}</p>
+                      <p className="fw-bold m-0 text-truncate">
+                        {detail.value}
+                      </p>
+                    </div>
+                    <div className="d-block d-md-none mb-3">
+                      <p className="fs-7 opacity-75 mb-1">{detail.name}</p>
+                      <p className="fw-bold m-0 text-truncate">
+                        {detail.value}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-            <div className="position-absolute bottom-0 end-0 p-4">
+            <div className="text-end d-flex d-md-block">
               <button
                 type="button"
-                className="btn btn-outline-primary fw-bold px-4 me-2"
+                className="btn btn-outline-primary fw-bold px-4 me-2 flex-grow-1"
                 onClick={() => setIsFormFilled(false)}
               >
                 Back
               </button>
               <button
                 type="button"
-                className="btn btn-primary fw-bold px-4"
+                className="btn btn-primary fw-bold px-2 px-md-4 flex-grow-1"
                 data-bs-toggle="modal"
                 data-bs-target="#pinInputModal"
               >
                 Continue
               </button>
             </div>
-          </>
+          </div>
         ) : (
-          <>
+          <div className="d-flex flex-column h-100">
             {/* TRANSFER SUCCESS */}
-            <p className="text-center mb-0">
-              {!isError ? (
-                <i className="bi bi-check-circle-fill fs-1 text-success"></i>
-              ) : (
-                <i className="bi bi-cross-circle-fill fs-1 text-danger"></i>
-              )}
-            </p>
-            <h2 className="fs-5 fw-bold mb-3 text-center">
-              {!isError ? "Transfer Success" : "Transfer Failed"}
-            </h2>
-            {isError ? (
-              <p className="fs-7 opacity-75 text-center">
-                We can't transfer your money at the moment, we recommend you to
-                check your internet connection and try again.
+            <div className="flex-grow-1">
+              <p className="text-center mb-0">
+                {!isError ? (
+                  <i className="bi bi-check-circle-fill fs-1 text-success"></i>
+                ) : (
+                  <i className="bi bi-cross-circle-fill fs-1 text-danger"></i>
+                )}
               </p>
-            ) : null}
-            <div className="row row-cols-2 mb-2">
-              {transferDetails.map((detail, index) => (
-                <div key={index} className="col">
-                  <div className="mb-3 rounded shadow-sm p-3">
-                    <p className="fs-7 opacity-75 mb-1">{detail.name}</p>
-                    <p className="fw-bold m-0 text-truncate">{detail.value}</p>
+              <h2 className="fs-5 fw-bold mb-3 text-center">
+                {!isError ? "Transfer Success" : "Transfer Failed"}
+              </h2>
+              {isError ? (
+                <p className="fs-7 opacity-75 text-center">
+                  We can't transfer your money at the moment, we recommend you
+                  to check your internet connection and try again.
+                </p>
+              ) : null}
+              <div className="row row-cols-2 mb-2">
+                {transferDetails.map((detail, index) => (
+                  <div key={index} className="col">
+                    <div className="mb-3 rounded shadow-sm p-3">
+                      <p className="fs-7 opacity-75 mb-1">{detail.name}</p>
+                      <p className="fw-bold m-0 text-truncate">
+                        {detail.value}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <h3 className="fs-6 fw-bold mb-3">Transfer to</h3>
+              <UserCard data={selectedReceiver} />
             </div>
-            <h3 className="fs-6 fw-bold mb-3">Transfer to</h3>
-            <UserCard data={selectedReceiver} />
-            <div className="position-absolute bottom-0 end-0 p-4">
+            <div className="text-end d-flex d-md-block">
               {!isError ? (
                 <>
                   <button
@@ -380,12 +407,12 @@ export default function Transfer(props) {
                     className="btn btn-outline-primary fw-bold px-4 me-2"
                     onClick={handlePdf}
                   >
-                    <i className="bi bi-download me-2"></i>
-                    Download PDF
+                    <i className="bi bi-download me-0 me-md-2"></i>
+                    <span className="d-none d-md-inline">Download PDF</span>
                   </button>
                   <button
                     type="button"
-                    className="btn btn-primary fw-bold px-4"
+                    className="btn btn-primary fw-bold px-4 flex-grow-1"
                     onClick={() => router.push("/dashboard")}
                   >
                     Back to Dashboard
@@ -394,14 +421,14 @@ export default function Transfer(props) {
               ) : (
                 <button
                   type="button"
-                  className="btn btn-primary fw-bold px-4"
+                  className="btn btn-primary fw-bold px-4 flex-grow-1"
                   onClick={() => router.push("/transfer")}
                 >
                   Try Again
                 </button>
               )}
             </div>
-          </>
+          </div>
         )}
       </div>
 
@@ -437,13 +464,26 @@ export default function Transfer(props) {
                   Enter your 6 digits PIN for confirmation to continue
                   transferring money.
                 </p>
-                <div className="w-50 mx-auto">
+                <div className="profile-form mx-auto">
                   <PinInput pin={pin} setPin={setPin} />
                 </div>
               </div>
               <div className="modal-footer border-0">
-                <button type="submit" className="btn btn-primary px-4">
-                  Continue
+                <button
+                  type="submit"
+                  className="btn btn-primary px-4 flex-grow-1 flex-md-grow-0"
+                  disabled={!isAllFormFilled}
+                >
+                  {isLoading ? (
+                    <div
+                      className="spinner-border spinner-border-sm text-white"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  ) : (
+                    "Continue"
+                  )}
                 </button>
               </div>
             </form>

@@ -17,6 +17,11 @@ export default function Login() {
   });
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isAllFormFilled = Object.keys(formLogin).every((el) => formLogin[el]);
+  console.log(isAllFormFilled);
 
   useEffect(() => {
     setIsError(false);
@@ -32,10 +37,12 @@ export default function Login() {
   const handleLogin = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
       const resultLogin = await axios.post("/auth/login", formLogin);
       const { id, pin, token } = resultLogin.data.data;
       Cookies.set("token", token);
       await dispatch(getUserByIdRedux(id));
+      setIsLoading(false);
       setIsError(false);
       setMessage("You're logged in succesfully");
       if (pin) {
@@ -45,6 +52,7 @@ export default function Login() {
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       setIsError(true);
       setMessage(error.response.data.msg);
     }
@@ -108,7 +116,7 @@ export default function Login() {
                 Password
               </label>
               <input
-                type="password"
+                type={showPwd ? "text" : "password"}
                 className="form-control"
                 id="password"
                 name="password"
@@ -116,6 +124,13 @@ export default function Login() {
                 value={formLogin.password}
                 onChange={handleChangeForm}
               />
+              <div role="button" onClick={() => setShowPwd(!showPwd)}>
+                <i
+                  className={`bi bi-${
+                    showPwd ? "eye-slash" : "eye"
+                  } text-secondary position-absolute top-50 end-0 translate-middle`}
+                ></i>
+              </div>
             </div>
             <Link href="/auth/forgot-password">
               <a className="fs-7 d-block text-end">Forgot password?</a>
@@ -124,8 +139,18 @@ export default function Login() {
           <button
             type="submit"
             className="btn btn-primary fw-bold mt-4 mb-4 w-100"
+            disabled={!isAllFormFilled}
           >
-            Login
+            {isLoading ? (
+              <div
+                className="spinner-border spinner-border-sm text-white"
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
         <p className="text-center m-0">

@@ -6,6 +6,8 @@ import axios from "../../utils/axios";
 
 export default function ForgotPassword() {
   const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formForgotPass, setFormForgotPass] = useState({
     email: "",
     linkDirect: process.env.URL_RESETPASSWORD,
@@ -19,10 +21,16 @@ export default function ForgotPassword() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
       const result = await axios.post("/auth/forgot-password", formForgotPass);
+      setIsLoading(false);
+      setIsError(false);
       setMessage(result.data.msg);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
+      setIsError(true);
+      setMessage(error.response.data.msg);
     }
   };
 
@@ -47,9 +55,15 @@ export default function ForgotPassword() {
           </p>
         </div>
         {message ? (
-          <div className="alert alert-success py-2" role="alert">
-            {message}
-          </div>
+          isError ? (
+            <div className="alert alert-danger py-2" role="alert">
+              {message}
+            </div>
+          ) : (
+            <div className="alert alert-success py-2" role="alert">
+              {message}
+            </div>
+          )
         ) : (
           <div className="mt-5"></div>
         )}
@@ -70,10 +84,24 @@ export default function ForgotPassword() {
               placeholder="Enter your email"
               value={formForgotPass.email}
               onChange={handleChangeForm}
+              required
             />
           </div>
-          <button type="submit" className="btn btn-primary fw-bold w-100">
-            Confirm
+          <button
+            type="submit"
+            className="btn btn-primary fw-bold w-100"
+            disabled={!formForgotPass.email}
+          >
+            {isLoading ? (
+              <div
+                className="spinner-border spinner-border-sm text-white"
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              "Confirm"
+            )}
           </button>
         </form>
       </div>

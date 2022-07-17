@@ -9,13 +9,20 @@ export default function ResetPassword() {
   const router = useRouter();
   const keys = router.query.keys;
 
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState("");
+  const [showNewPwd, setShowNewPwd] = useState(false);
+  const [showConfirmPwd, setShowConfirmPwd] = useState(false);
   const [formNewPassword, setFormNewPassword] = useState({
     keysChangePassword: keys,
     newPassword: "",
     confirmPassword: "",
   });
+
+  const isAllFormFilled = Object.keys(formNewPassword).every(
+    (el) => formNewPassword[el]
+  );
 
   useEffect(() => {
     setFormNewPassword({ ...formNewPassword, keysChangePassword: keys });
@@ -29,11 +36,14 @@ export default function ResetPassword() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
       const result = await axios.patch("/auth/reset-password", formNewPassword);
+      setIsLoading(false);
       setIsError(false);
       setMessage(result.data.data.msg);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       setIsError(true);
       setMessage(error.response.data.msg);
     }
@@ -85,7 +95,7 @@ export default function ResetPassword() {
                 New Password
               </label>
               <input
-                type="password"
+                type={showNewPwd ? "text" : "password"}
                 className="form-control"
                 id="new-password"
                 name="newPassword"
@@ -94,6 +104,13 @@ export default function ResetPassword() {
                 onChange={handleChangeForm}
                 required
               />
+              <div role="button" onClick={() => setShowNewPwd(!showNewPwd)}>
+                <i
+                  className={`bi bi-${
+                    showNewPwd ? "eye-slash" : "eye"
+                  } text-secondary position-absolute top-50 end-0 translate-middle`}
+                ></i>
+              </div>
             </div>
             <div className="input-with-icon mb-4">
               <i className="bi bi-lock input-icon text-secondary"></i>
@@ -104,7 +121,7 @@ export default function ResetPassword() {
                 Confirm Password
               </label>
               <input
-                type="password"
+                type={showConfirmPwd ? "text" : "password"}
                 className="form-control"
                 id="confirm-password"
                 name="confirmPassword"
@@ -113,6 +130,16 @@ export default function ResetPassword() {
                 onChange={handleChangeForm}
                 required
               />
+              <div
+                role="button"
+                onClick={() => setShowConfirmPwd(!showConfirmPwd)}
+              >
+                <i
+                  className={`bi bi-${
+                    showConfirmPwd ? "eye-slash" : "eye"
+                  } text-secondary position-absolute top-50 end-0 translate-middle`}
+                ></i>
+              </div>
             </div>
           </div>
           <div>
@@ -121,8 +148,18 @@ export default function ResetPassword() {
               className={`btn ${
                 isError ? "btn-outline-primary" : "btn-primary"
               } fw-bold w-100`}
+              disabled={!isAllFormFilled}
             >
-              Reset Password
+              {isLoading ? (
+                <div
+                  className="spinner-border spinner-border-sm text-white"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                "Reset Password"
+              )}
             </button>
             {isError ? (
               <button
