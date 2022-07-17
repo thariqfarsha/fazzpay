@@ -10,8 +10,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/thariqfarsha/tickitix-mobile" style="font-size: 40px; font-weight: 700; color: #4c64ec">
-    FazzPay
+  <a href="https://github.com/thariqfarsha/tickitix-mobile">
+    <img src="https://res.cloudinary.com/dm8rg2aj8/image/upload/v1658055362/Fazzpay/SS/web/FazzPay_1_vh6by8.png" alt="fazzpay logo" />
   </a>
 
   <!-- <h2 align="center">Tickitix</h2> -->
