@@ -21,7 +21,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   const isAllFormFilled = Object.keys(formLogin).every((el) => formLogin[el]);
-  console.log(isAllFormFilled);
 
   useEffect(() => {
     setIsError(false);
